@@ -1,17 +1,20 @@
 const blogsRouter = require('express').Router()
+
+const User = require('../models/user')
 const Blog = require('../models/blog')
 
-blogsRouter.get('/', (request, response) => {
-    Blog
+blogsRouter.get('/', async (request, response) => {
+    const blogs = await Blog
         .find({})
-        .then(blogs => {
-            response.json(blogs)
-        })
+        .populate('user', {username: 1, name: 1})
+    response.json(blogs.map(blog => blog.toJSON()))
 })
 
 blogsRouter.get('/:id', async (request, response) => {
     const id = request.params.id
-    const blog = await Blog.findById(id)
+    const blog = await Blog
+        .findById(id)
+        .populate('user', {username: 1, name: 1})
     response.json(blog.toJSON())
 })
 
@@ -19,15 +22,25 @@ blogsRouter.post('/', async (request, response, next) => {
     const body = request.body
     console.log(body)
 
+    if(!response.locals.userId){
+        return response.status(401).json({error: 'invalid token'})
+    }
+
+    const user = await User.findById(response.locals.userId)
+
+
     const blog = new Blog({
         title: body.title,
         author: body.author,
         url: body.url,
-        likes: body.likes || 0
+        likes: body.likes || 0,
+        user: response.locals.userId
     })
     const savedBlog = await blog.save()
+    user.blogs = user.blogs.concat(savedBlog._id)
+    await user.save()
 
-    return response.status(201).json(savedBlog)
+    return response.status(201).json(savedBlog).end()
 
 })
 
@@ -38,12 +51,12 @@ blogsRouter.delete('/:id', async (request, response, next) => {
 })
 
 blogsRouter.put('/:id', async (request, response, next)=>{
-    const { content, important } = request.body
+    const { title, author, url, likes } = request.body
 
     const updatedBlog = await Blog
         .findByIdAndUpdate(
             request.params.id, 
-            { content, important }, 
+            { title, author, url, likes }, 
             { new: true, runValidators: true, context: 'query'}
         )
     if(updatedBlog){    

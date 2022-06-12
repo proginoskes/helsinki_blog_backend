@@ -6,31 +6,34 @@ const initialBlogs = [
         author: 'Edsger W. Dijkstra',
         url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
         likes: 5,
+        user: '62a60d03e9fe2a54e37e6673'
     },
     {
         title: 'Twelve Principles behind the Agile Manifesto',
         author: 'Agile Working Group',
         url: 'https://agilemanifesto.org/principles.html',
         likes: 12,
+        user: '62a60d03e9fe2a54e37e6673'
     },
     {
-        _id: '5a422aa71b54a676234d17f2',
         title: 'Aesthetics and the Human Factor in Programming',
         author: 'Andrey P. Ershov',
         url: 'http://www.softpanorama.org/Articles/Ershov/aesthetics_and_the_human_factor_in_programming_ershov1972.shtml',
         likes: 7,
-        __v: 0
+        user: '62a60d03e9fe2a54e37e6673'
     },
     {
         title: 'How I started analyzing algorithms and for the sake of this I went to the USSR',
         author: 'Donald Knuth',
         url: 'https://sudonull.com/post/76923-Donald-Knuth-how-I-started-analyzing-algorithms-and-for-the-sake-of-it-I-went-to-the-USSR-379197-97-',
         likes: 4,
+        user: '62a60d03e9fe2a54e37e6673'
     },
     {
         title: 'School Informatics in the USSR: from Literacy to Culture',
         author: 'Andrey P. Ershov',
         url: 'http://ershov.iis.nsk.su/ru/node/768160',
+        user: '62a60d03e9fe2a54e37e6673'
     }
 ]
 

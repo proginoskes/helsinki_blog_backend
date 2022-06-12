@@ -10,8 +10,7 @@ const jwtValidator = () => {
     }
 
     const validate = (request, response, next) => {
-        if(request.method === 'POST' 
-            && request.path === '/api/notes'){
+        if(request.method === 'POST' || request.method === 'DELETE'){
             const token = getTokenFrom(request)
             const decodedToken = jwt.verify(token,process.env.SECRET)
             
