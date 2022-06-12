@@ -7,13 +7,14 @@
     "test": "tests"
   },
   "scripts": {
+    "start": "cross-env NODE_ENV=production node index.js",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "build:ui": "rm -rf build && cd ../frontend_blog && npm run build && cp -r build ../backend_blog",
     "deploy": "git push heroku master",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push && npm run deploy",
     "logs:prod": "heroku logs --tail",
     "lint": "eslint .",
-    "test": "jest --verbose"
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand --forceExit"
   },
   "author": "Proginoskes",
   "license": "ISC",
@@ -22,9 +23,11 @@
     "cross-env": "^7.0.3",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
+    "express-async-errors": "^3.1.1",
     "jest": "^28.1.1",
     "lodash": "^4.17.21",
-    "mongoose": "^6.3.6"
+    "mongoose": "^6.3.6",
+    "supertest": "^6.2.3"
   },
   "devDependencies": {
     "eslint": "^8.17.0",
