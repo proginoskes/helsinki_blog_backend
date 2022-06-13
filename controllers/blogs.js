@@ -20,7 +20,13 @@ blogsRouter.get('/:id', async (request, response) => {
 
 blogsRouter.post('/', async (request, response, next) => {
     const body = request.body
-    console.log(body)
+
+    // check that blog doesn't already exist
+    const check_exists = await Blog
+        .findOne({title: body.title, author: body.author})
+    if(check_exists){
+        return response.status(400).json({error: 'blog already exists'})
+    }
 
     if(!response.locals.userId){
         return response.status(401).json({error: 'invalid token'})

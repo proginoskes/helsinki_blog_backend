@@ -88,7 +88,6 @@ describe('post requests', () => {
         expect(post_response.body.id).toStrictEqual(final_response.body.id)
         expect(post_response.body.likes).toStrictEqual(final_response.body.likes)
         expect(post_response.body.url).toStrictEqual(final_response.body.url)
-        expect(post_response.body.user).toStrictEqual(final_response.body.user.id)
     })
 
     test('posting a blog without title or author returns 400 error', async () => {
@@ -148,7 +147,7 @@ describe('delete requests', () => {
 })
 
 describe('update requests', () => {
-    beforeEach(async () => {
+    beforeAll(async () => {
         await Blog.deleteMany({})
         await Blog.insertMany(listHelper.initialBlogs)
     })
@@ -162,20 +161,20 @@ describe('update requests', () => {
     test('updating url updates url', async () => {
         const response = await api.get('/api/blogs')
         const update_response = await api.put(`/api/blogs/${response.body[0].id}`)
-            .send({url: 'crouton.net'})
-        expect(update_response.body.url).toEqual('crouton.net')
+            .send({url: 'https://cgi.di.uoa.gr/~sgk/teaching/grad/handouts/karp.pdf'})
+        expect(update_response.body.url).toEqual('https://cgi.di.uoa.gr/~sgk/teaching/grad/handouts/karp.pdf')
     })
     test('updating author updates author', async () => {
         const response = await api.get('/api/blogs')
         const update_response = await api.put(`/api/blogs/${response.body[0].id}`)
-            .send({author: 'George III'})
-        expect(update_response.body.author).toEqual('George III')
+            .send({ author: 'Richard Karp' })
+        expect(update_response.body.author).toEqual('Richard Karp')
     })
     test('updating title updates title', async () => {
         const response = await api.get('/api/blogs')
         const update_response = await api.put(`/api/blogs/${response.body[0].id}`)
-            .send({title: 'Borange'})
-        expect(update_response.body.title).toEqual('Borange')
+            .send({title: 'Reducibility Among Combinatorial Problems'})
+        expect(update_response.body.title).toEqual('Reducibility Among Combinatorial Problems')
     })
 })
 
