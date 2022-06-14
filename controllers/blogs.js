@@ -34,7 +34,6 @@ blogsRouter.post('/', async (request, response, next) => {
 
     const user = await User.findById(response.locals.userId)
 
-
     const blog = new Blog({
         title: body.title,
         author: body.author,
@@ -65,7 +64,8 @@ blogsRouter.put('/:id', async (request, response, next)=>{
             { title, author, url, likes }, 
             { new: true, runValidators: true, context: 'query'}
         )
-    if(updatedBlog){    
+        .populate('user', {username: 1, name: 1})
+    if(updatedBlog){
         response.json(updatedBlog)
     }else{
         response.status(404).end()

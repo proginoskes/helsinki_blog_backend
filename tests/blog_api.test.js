@@ -8,6 +8,8 @@ const Blog = require('../models/blog')
 
 const api = supertest(app)
 
+let test_userid
+
 describe('get requests', () => {
     beforeEach(async () => {
         await Blog.deleteMany({})
@@ -149,7 +151,12 @@ describe('delete requests', () => {
 describe('update requests', () => {
     beforeAll(async () => {
         await Blog.deleteMany({})
-        await Blog.insertMany(listHelper.initialBlogs)
+        await Blog.insertMany(listHelper.initialBlogs.map(blog => (
+            {
+                ...blog,
+                user: test_userid
+            }
+        )))
     })
     test('updating likes updates likes', async () => {
         const response = await api.get('/api/blogs')
@@ -175,6 +182,12 @@ describe('update requests', () => {
         const update_response = await api.put(`/api/blogs/${response.body[0].id}`)
             .send({title: 'Reducibility Among Combinatorial Problems'})
         expect(update_response.body.title).toEqual('Reducibility Among Combinatorial Problems')
+    })
+    test('updating likes does not change user', async () => {
+        const response = await api.get('/api/blogs')
+        const update_response = await api.put(`/api/blogs/${response.body[0].id}`)
+            .send({user: test_userid})
+        expect(update_response.body.user).toEqual(test_userid)
     })
 })
 
